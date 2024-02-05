@@ -17,20 +17,28 @@ router.get("/", (req, res) => {
 //   });
 // });
 
-// router.post("/users", (req, res) => {
-//   const { name, email, password } = req.body;
+router.post("/users", async (req, res) => {
+  const { name, email, password } = req.body;
 
-//   connection.query(
-//     `INSERT INTO Users (Name,Email,Password) VALUES (${name}, ${email}, ${password})`,
-//     (err, result, field) => {
-//       if (err) {
-//         console.log(err);
-//         return res.status(401).send("User not created!");
-//       }
+  //   try {
+  //     const [result, field] = await connection.query(
+  //       `INSERT INTO Users (Name,Email,Password) VALUES (?,?,?)`,
+  //       [name, email, password]
+  //     );
 
-//       res.send({ result });
-//     }
-//   );
-// });
+  //     if (!result && !field) {
+  //       return res.status(400).send("User not created!");
+  //     }
+  //     res.status(201).send(result);
+  //   } catch (err) {
+  //     console.log(err);
+  //     res.status(500).send("Internal Server Error");
+  //   }
+  try {
+    await connection.ping();
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 module.exports = router;
