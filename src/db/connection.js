@@ -1,4 +1,4 @@
-const mysql = require("mysql2/promise");
+const mysql = require("mysql2");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -16,6 +16,14 @@ const connection = mysql.createConnection({
 //     throw err;
 //   }
 // };
+
+connection.connect((err) => {
+  if (err) {
+    console.log("Connection Failed! Error: ", err);
+  } else {
+    console.log("Connection Established!");
+  }
+});
 
 // connectToDatabase()
 //   .then((res) => console.log(res))
