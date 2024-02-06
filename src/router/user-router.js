@@ -17,6 +17,7 @@ router.get("/users", (req, res) => {
   });
 });
 
+// ---------register user--------------------
 router.post("/users", (req, res) => {
   const { name, email, password } = req.body;
 
@@ -30,7 +31,6 @@ router.post("/users", (req, res) => {
       }
 
       if (result) {
-        console.log(result, field);
         res.send({ msg: "Sent data success", result });
       }
     }
@@ -44,6 +44,28 @@ router.post("/users", (req, res) => {
   //   console.log(err);
   //   res.status(500).send("Internal Server Error");
   // }
+});
+
+// login user----------------------------------
+router.post("/users/login", (req, res) => {
+  const queryToMatchUser = "SELECT * FROM Users WHERE Email=? AND password=?";
+  const { email, password } = req.body;
+
+  connection.query(
+    queryToMatchUser,
+    [email, password],
+    (err, result, fields) => {
+      if (err) {
+        return res.status(500).send("Internal Server Error!");
+      }
+
+      if (result.length == 0) {
+        return res.status(404).send("Login Failed");
+      }
+
+      res.send("success");
+    }
+  );
 });
 
 // Get User By Id---------------------------
@@ -74,7 +96,6 @@ router.delete("/users/:id", (req, res) => {
 });
 
 // update user---------------------------------
-
 router.patch("/users/:id", (req, res) => {
   const { name, email, password } = req.body;
   const userId = req.params.id;
