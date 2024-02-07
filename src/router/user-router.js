@@ -18,7 +18,7 @@ router.get("/users", (req, res) => {
 });
 
 // ---------register user--------------------
-router.post("/users", (req, res) => {
+router.post("/users/register", (req, res) => {
   const { name, email, password } = req.body;
 
   connection.query(
@@ -31,7 +31,7 @@ router.post("/users", (req, res) => {
       }
 
       if (result) {
-        res.send({ msg: "Sent data success", result });
+        res.send("Success");
       }
     }
   );
@@ -48,7 +48,7 @@ router.post("/users", (req, res) => {
 
 // login user----------------------------------
 router.post("/users/login", (req, res) => {
-  const queryToMatchUser = "SELECT * FROM Users WHERE Email=? AND password=?";
+  const queryToMatchUser = "SELECT * FROM Users WHERE Email=? AND Password=?";
   const { email, password } = req.body;
 
   connection.query(
@@ -62,8 +62,8 @@ router.post("/users/login", (req, res) => {
       if (result.length == 0) {
         return res.status(404).send("Login Failed");
       }
-
-      res.send("success");
+      // console.log(result[0].Email);
+      res.send({ msg: "Success", user: result[0].Email });
     }
   );
 });
@@ -99,7 +99,7 @@ router.delete("/users/:id", (req, res) => {
 router.patch("/users/:id", (req, res) => {
   const { name, email, password } = req.body;
   const userId = req.params.id;
-  const query = "UPDATE Users SET Name=?, Email=?, password=? WHERE UserId=?";
+  const query = "UPDATE Users SET Name=?, Email=?, Password=? WHERE UserId=?";
 
   connection.query(query, [name, email, password, userId], (err, result) => {
     if (err) {
